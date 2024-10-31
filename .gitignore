@@ -2,5 +2,3 @@
 /cmake-build-release
 /cmake-build-debug
 /.idea
-/vcpkg
-/vcpkg_installed
