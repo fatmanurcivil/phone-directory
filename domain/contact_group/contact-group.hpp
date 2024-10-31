@@ -16,7 +16,7 @@ public:
 
 
 
-    // ID olmadan kullanılabilecek construct or
+    // ID olmadan kullanılabilecek construct orr
     ContactGroup(std::string groupName, std::string groupSurname, std::string email, std::string phone)
         : groupName(std::move(groupName)), groupSurname(std::move(groupSurname)), email(std::move(email)), phone(std::move(phone)) {}
 
