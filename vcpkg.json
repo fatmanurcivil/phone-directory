@@ -1,0 +1,17 @@
+{
+  "name" : "ddd-test",
+  "version" : "1.0.0",
+  "builtin-baseline" : "2ddc10c8afa00a762a69f21f6427849fe906ede0",
+  "dependencies" : [ {
+    "name" : "crow"
+  }, {
+    "name" : "nlohmann-json"
+  }, {
+    "name" : "libpqxx"
+  }, {
+    "name" : "libpq"
+  }, {
+    "name" : "vk-bootstrap",
+    "version>=" : "1.3.279#1"
+  } ]
+}
