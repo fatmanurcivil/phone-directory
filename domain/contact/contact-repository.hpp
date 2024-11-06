@@ -1,10 +1,10 @@
 #ifndef CONTACT_REPOSITORY_HPP
 #define CONTACT_REPOSITORY_HPP
 
-#include "contact.hpp"
-#include "contact-factory.hpp"
+#include "contact/contact-factory.hpp"
 #include <pqxx/pqxx>
 #include <optional>
+#include <stdexcept>
 
 namespace ContactRepository {
 
@@ -12,29 +12,34 @@ namespace ContactRepository {
     inline void addContact(pqxx::connection& conn, const std::string& name, const std::string& surname, const std::string& phone, const std::string& email) {
         const std::string query = "INSERT INTO phonebook (name, surname, email, phone_number) VALUES ($1, $2, $3, $4)";
         pqxx::nontransaction txn(conn);
-        txn.exec_params(query,name, surname, email, phone);
-
+        txn.exec_params(query, name, surname, email, phone);
     }
-    inline std::vector<Contact> listContacts(pqxx::connection& conn, const std::optional<int>& id = std::nullopt,
-                                           const std::optional<int>& page = std::nullopt,
-                                           const std::optional<int>& pageSize = std::nullopt) {
+
+    inline std::optional<Contact> getContactById(pqxx::connection& conn, int id) {
+        pqxx::nontransaction txn(conn);
+        const std::string query = "SELECT id, name, surname, email, phone_number FROM phonebook WHERE id = $1";
+        const pqxx::result result = txn.exec_params(query, id);
+
+        if (result.empty()) {
+            return std::nullopt;
+        }
+
+        return ContactFactory::createContactFromRow(result[0]);
+    }
+
+    // Tüm contactları listeleme
+    inline std::vector<Contact> listContacts(pqxx::connection& conn,const std::optional<int>& page = std::nullopt,const std::optional<int>& pageSize = std::nullopt) {
         std::vector<Contact> contacts;
         pqxx::nontransaction txn(conn);
-        std::string query;
+        std::string query = "SELECT id, name, surname, email, phone_number FROM phonebook";
 
-        if (id.has_value()) {
-            query = "SELECT id, name, surname, email, phone_number FROM phonebook WHERE id = $1";
-        } else {
-            query = "SELECT id, name, surname, email, phone_number FROM phonebook";
-            if (page.has_value() && pageSize.has_value()) {
-                query += " LIMIT $1 OFFSET $2";
-            }
+        if (page.has_value() && pageSize.has_value()) {
+            query += " LIMIT $1 OFFSET $2";
         }
+
         pqxx::result result;
 
-        if (id.has_value()) {
-            result = txn.exec_params(query, id.value());
-        } else if (page.has_value() && pageSize.has_value()) {
+        if (page.has_value() && pageSize.has_value()) {
             result = txn.exec_params(query, pageSize.value(), (page.value() - 1) * pageSize.value());
         } else {
             result = txn.exec(query);
@@ -55,7 +60,6 @@ namespace ContactRepository {
         const std::string query = "DELETE FROM phonebook WHERE id = $1";
         pqxx::nontransaction txn(conn);
         txn.exec_params(query, id);
-
     }
 
     // Contact güncelleme
@@ -63,10 +67,8 @@ namespace ContactRepository {
         const std::string query = "UPDATE phonebook SET name = $1, surname = $2, email = $3, phone_number = $4 WHERE id = $5";
         pqxx::nontransaction txn(conn);
         txn.exec_params(query, contact.name, contact.surname, contact.email, contact.phone, contact.id);
-
     }
 
 } // namespace ContactRepository
 
 #endif // CONTACT_REPOSITORY_HPP
-

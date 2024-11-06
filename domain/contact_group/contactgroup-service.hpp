@@ -1,8 +1,7 @@
 #ifndef CONTACTGROUP_SERVICE_HPP
 #define CONTACTGROUP_SERVICE_HPP
 
-#include "contactgroup-repository.hpp"
-#include "contact-group.hpp"
+#include "../../domain/contact_group/contactgroup-repository.hpp"
 #include <pqxx/pqxx>
 #include <optional>
 #include <vector>

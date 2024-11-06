@@ -2,7 +2,10 @@
 #include <pqxx/pqxx>
 #include <string>
 #include <crow.h>
-#include "application/contact-service.hpp"
+#include <nlohmann/json.hpp>
+#include "application/contact/contact-service.hpp"
+#include "application/product/product-service.hpp"
+#include "product-factory.hpp"
 
 using json = nlohmann::json;
 
@@ -32,7 +35,6 @@ int main() {
         CROW_ROUTE(app, "/update_contact").methods(crow::HTTPMethod::POST)([&conn](const crow::request& req) {
             try {
                 const auto data = json::parse(req.body);
-                // Contact nesnesini oluştur
                 const Contact contact = {
                     data.at("id").get<int>(),
                     data.at("name").get<std::string>(),
@@ -111,7 +113,7 @@ int main() {
                 const std::string email = data.value("email", "");
                 const std::string phone = data.value("phone", "");
 
-                ApplicationContactService::updateContactGroup(conn,id,name,surname,email,phone);
+                ApplicationContactService::updateContactGroup(conn, id, name, surname, email, phone);
 
                 return crow::response{"application/json", nlohmann::json{{"message", "Contact group updated"}}.dump()};
             } catch (const std::exception& e) {
@@ -127,8 +129,7 @@ int main() {
                 const std::string phone = data["phone"].get<std::string>();
                 const std::string email = data["email"].get<std::string>();
 
-                // Todo burada domaın nesnelerı olmayacak
-                ApplicationContactService::addContactGroup(conn,name,surname,email,phone);
+                ApplicationContactService::addContactGroup(conn, name, surname, email, phone);
                 return crow::response{"application/json", nlohmann::json{{"message", "Contact group added successfully"}}.dump()};
             } catch (const std::exception& e) {
                 return crow::response{"application/json", nlohmann::json{{"error", e.what()}}.dump()};
@@ -143,13 +144,13 @@ int main() {
                     return crow::response(400, R"({"error": "Group ID not provided"})");
                 }
                 const int groupId = static_cast<int>(json["groupId"].i());
-                const std::optional optionalGroup = ApplicationContactService::getContactGroupById(conn, groupId);
+                const std::optional<ContactGroup> optionalGroup = ApplicationContactService::getContactGroupById(conn, groupId);
 
                 if (!optionalGroup.has_value()) {
                     return crow::response(404, R"({"error": "Contact Group not found"})");
                 }
 
-                const ContactGroup& group = optionalGroup.value();//değeri oluşturur
+                const ContactGroup& group = optionalGroup.value();
 
                 if (group.groupName.empty() || group.groupSurname.empty() || group.email.empty() || group.phone.empty()) {
                     return crow::response(400, R"({"error": "Contact Group has missing fields"})");
@@ -169,10 +170,96 @@ int main() {
             }
         });
 
+        /////////////////////////////PRODUCT//////////////////////////////////
+
+        // Product Ekleme isteği
+        CROW_ROUTE(app, "/addProduct").methods(crow::HTTPMethod::POST)([&conn](const crow::request& req) {
+            try {
+                auto data = json::parse(req.body);
+                const std::string name = data["name"].get<std::string>();
+                const std::string surname = data["surname"].get<std::string>();
+                const std::string email = data["email"].get<std::string>();
+                const std::string phone = data["phone"].get<std::string>();
+
+                ProductService::AddProduct(conn, name, surname, email, phone);
+
+                return crow::response{"application/json", json{{"message", "Product added successfully"}}.dump()};
+            } catch (const std::exception& e) {
+                return crow::response{"application/json", json{{"error", "Failed to add product: " + std::string(e.what())}}.dump()};
+            }
+        });
+        // Product Güncelleme isteği
+        CROW_ROUTE(app, "/update_product").methods(crow::HTTPMethod::POST)([&conn](const crow::request& req) {
+            try {
+                auto data = nlohmann::json::parse(req.body);
+                const std::string name = data["name"].get<std::string>();
+                const std::string surname = data.value("surname", "");
+                const std::string email = data.value("email", "");
+                const std::string phone = data.value("phone", "");
+
+                ProductService::Updateproduct(conn, name,surname,email,phone);
+
+                return crow::response{"application/json", json{{"message", "Product updated successfully"}}.dump()};
+            } catch (const std::exception& e) {
+                return crow::response{"application/json", json{{"error", "Update failed: " + std::string(e.what())}}.dump()};
+            }
+        });
+
+        // Product Listeleme isteği
+        CROW_ROUTE(app, "/Listproduct").methods(crow::HTTPMethod::GET)([&conn]() {
+           try {
+               const auto products = ProductService::Listproduct(conn);
+               const json result = ProductFactory::createFromResult(products);
+               return crow::response{"application/json", result.dump()};
+           } catch (const std::exception& e) {
+               return crow::response{"application/json", json{{"error", "Failed to retrieve products: " + std::string(e.what())}}.dump()};
+           }
+       });
+
+        // Product Silme isteği
+        CROW_ROUTE(app, "/Deleteproduct").methods(crow::HTTPMethod::DELETE)([&conn](const crow::request& req) {
+            try {
+                const auto data = json::parse(req.body);
+                const int id = data.at("id").get<int>();
+                ProductService::Deleteproduct(conn, id);
+                return crow::response{"application/json", json{{"message", "Product deleted successfully"}}.dump()};
+            } catch (const std::exception& e) {
+                return crow::response{"application/json", json{{"error", "Product not found: " + std::string(e.what())}}.dump()};
+            }
+        });
+
+        // Product ID ile Getirme isteği
+        CROW_ROUTE(app, "/Getbyidproduct").methods(crow::HTTPMethod::POST)([&conn](const crow::request& req) {
+            try {
+                const auto json = crow::json::load(req.body);
+
+                if (!json || !json["productId"]) {
+                    return crow::response(400, R"({"error": "Product ID not provided"})");
+                }
+                const int productId = static_cast<int>(json["productId"].i());
+                const std::optional optionalProduct = ProductService::Getbyidproduct(conn, productId);
+
+                if (!optionalProduct.has_value()) {
+                    return crow::response(404, R"({"error": "Product not found"})");
+                }
+
+                const product& product = optionalProduct.value();
+                const nlohmann::json jsonproduct = {
+                       {"id", product.id},
+                       {"name", product.name},
+                       {"surname", product.surname},
+                       {"phone", product.phone},
+                       {"email", product.email}
+                   };
+                return crow::response{"application/json", jsonproduct.dump()};
+            } catch (const std::exception& e) {
+                return crow::response{"application/json", json{{"error", e.what()}}.dump()};
+            }
+        });
         app.port(18080).multithreaded().run();
-    } catch (const std::exception &e) {
+    } catch (const std::exception& e) {
         std::cerr << "Error: " << e.what() << std::endl;
-        return 1;
+        return 0;
     }
-    return 0;
+
 }

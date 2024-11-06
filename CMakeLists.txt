@@ -1,32 +1,44 @@
 cmake_minimum_required(VERSION 3.29)
 project(CrowExampleProject)
 
-# Vcpkg toolchain dosyasını ayarlayın
-set(CMAKE_TOOLCHAIN_FILE "/home/fatmanur/.vcpkg-clion/vcpkg/scripts/buildsystems/vcpkg.cmake" CACHE STRING "Vcpkg toolchain file")
+set(CMAKE_TOOLCHAIN_FILE "/home/manufacture/.vcpkg-clion/vcpkg/scripts/buildsystems/vcpkg.cmake" CACHE STRING "Vcpkg toolchain file")
 
-# Yürütülebilir dosya hedefi oluşturun
-add_executable(crow_example
-        main.cpp
-        application/contact-service.hpp
-        ############## CONTACT-GROUP İÇİN #############
-        domain/contact_group/contactgroup-service.hpp
-        domain/contact_group/contact-group.hpp
-        domain/contact_group/contactgroup-factory.hpp
-        domain/contact_group/contactgroup-repository.hpp
+include_directories(
+        ${CMAKE_CURRENT_SOURCE_DIR}/application/contact
+        ${CMAKE_CURRENT_SOURCE_DIR}/application/product
+        ${CMAKE_CURRENT_SOURCE_DIR}/domain/contact
+        ${CMAKE_CURRENT_SOURCE_DIR}/domain/contact_group
+        ${CMAKE_CURRENT_SOURCE_DIR}/domain/product
+        ${CMAKE_SOURCE_DIR}/domain
+        ${CMAKE_SOURCE_DIR}/application
 
-
-        domain/contact/contact-service.hpp
-        domain/contact/contact.hpp
-        domain/contact/contact-factory.hpp
-        domain/contact/contact-repository.hpp
 )
 
-# Crow ve diğer kütüphaneleri bulun
+add_executable(crow_example
+        main.cpp
+        application/contact/contact-service.hpp
+        application/product/product-service.hpp
+
+        domain/contact/contact.hpp
+        domain/contact/contact-service.hpp
+        domain/contact/contact-factory.hpp
+        domain/contact/contact-repository.hpp
+
+        domain/contact_group/contactgroup-service.hpp
+        domain/contact_group/contactgroup-repository.hpp
+        domain/contact_group/contactgroup-factory.hpp
+        domain/contact_group/contact-group.hpp
+
+        domain/product/product.hpp
+        domain/product/product-factory.hpp
+        domain/product/product-repository.hpp
+        domain/product/product-service.hpp
+)
+
 find_package(Crow CONFIG REQUIRED)
 find_package(nlohmann_json CONFIG REQUIRED)
 find_package(libpqxx CONFIG REQUIRED)
 
-# Hedefe kütüphaneleri bağlayın
 target_link_libraries(crow_example PRIVATE
         Crow::Crow
         libpqxx::pqxx

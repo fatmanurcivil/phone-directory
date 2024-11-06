@@ -1,11 +1,11 @@
 #ifndef APPLICATION_CONTACT_SERVICE_HPP
 #define APPLICATION_CONTACT_SERVICE_HPP
 
+#include <optional>
 #include <string>
 #include <pqxx/pqxx>
-#include "../domain/contact_group/contactgroup-service.hpp"
-#include "../domain/contact/contact.hpp"
-#include "../domain/contact/contact-service.hpp"
+#include "contact_group/contactgroup-service.hpp"
+#include "contact/contact-service.hpp"
 
 namespace ApplicationContactService {
 
@@ -22,7 +22,7 @@ namespace ApplicationContactService {
         ContactService::updateContact(conn, contact);
     }
 
-                       //////////////// CONTACT GROUP/////////////////////////
+                  //////////////// CONTACT GROUP/////////////////////////
 
     inline void deleteContactGroup(pqxx::connection &conn, const int groupId) {
         ContactGroupService::deleteContactGroup(conn, groupId);
