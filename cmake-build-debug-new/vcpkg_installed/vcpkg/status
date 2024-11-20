@@ -1,0 +1,141 @@
+Package: vcpkg-cmake-config
+Version: 2024-05-23
+Architecture: x64-linux
+Multi-Arch: same
+Abi: 4ebc6355d0268513b2077e253605f442f4ce8e7b1fdf1ab2b96c5e1f0cf02c1c
+Status: install ok installed
+
+Package: vcpkg-cmake
+Version: 2024-04-23
+Architecture: x64-linux
+Multi-Arch: same
+Abi: 268e0c5a57d0fe8e45d08e86fe7e0432dea0f853c2580b0e29dba0a1320ab3e1
+Status: install ok installed
+
+Package: asio
+Version: 1.31.0
+Depends: vcpkg-cmake, vcpkg-cmake-config
+Architecture: x64-linux
+Multi-Arch: same
+Abi: 6521049e66791034289ceff9b1b1d3cb6b1a0d4e3f97b9c263762e31b9e00a10
+Description: Asio is a cross-platform C++ library for network and low-level I/O programming that provides developers with a consistent asynchronous model using a modern C++ approach.
+Status: install ok installed
+
+Package: crow
+Version: 1.2.0
+Depends: asio, vcpkg-cmake, vcpkg-cmake-config
+Architecture: x64-linux
+Multi-Arch: same
+Abi: d3c24ca353651ea782e3d0073dd326506c9080461997d41bc3a32778ecfc31ca
+Description: Very fast and easy to use C++ micro web framework
+Status: install ok installed
+
+Package: zlib
+Version: 1.3.1
+Depends: vcpkg-cmake
+Architecture: x64-linux
+Multi-Arch: same
+Abi: fea7d57474456dc57ea024556abcf11bba557a881ae9c32a84e8c615f7edc06f
+Description: A compression library
+Status: install ok installed
+
+Package: vcpkg-cmake-get-vars
+Version: 2024-09-22
+Depends: vcpkg-cmake
+Architecture: x64-linux
+Multi-Arch: same
+Abi: 300e66c880f9a4d6298c91c551f3e8df093477c8a471c5c34cabcee7bd892cf2
+Status: install ok installed
+
+Package: openssl
+Version: 3.3.2
+Port-Version: 1
+Depends: vcpkg-cmake, vcpkg-cmake-config, vcpkg-cmake-get-vars
+Architecture: x64-linux
+Multi-Arch: same
+Abi: 3610e226b8c20a117f6dd25c39256afd8ad086f5e97a463dde1390ef26c05760
+Description: OpenSSL is an open source project that provides a robust, commercial-grade, and full-featured toolkit for the Transport Layer Security (TLS) and Secure Sockets Layer (SSL) protocols. It is also a general-purpose cryptography library.
+Status: install ok installed
+
+Package: lz4
+Version: 1.10.0
+Depends: vcpkg-cmake, vcpkg-cmake-config
+Architecture: x64-linux
+Multi-Arch: same
+Abi: a6a9796841bf96fa2cd0a8066c7f0dfb4201981bcfc182cf43883b8d23007013
+Description: Lossless compression algorithm, providing compression speed at 400 MB/s per core.
+Status: install ok installed
+
+Package: libpq
+Version: 16.4
+Depends: vcpkg-cmake-get-vars
+Architecture: x64-linux
+Multi-Arch: same
+Abi: e7b8949e43763846aead3dd11d261cf1a59a2a15d8d105c234bf7ea3b588ecde
+Description: The official database access API of postgresql
+Default-Features: lz4, openssl, zlib
+Status: install ok installed
+
+Package: libpq
+Feature: lz4
+Depends: lz4
+Architecture: x64-linux
+Multi-Arch: same
+Description: Use lz4
+Status: install ok installed
+
+Package: libpq
+Feature: openssl
+Depends: openssl
+Architecture: x64-linux
+Multi-Arch: same
+Description: support for encrypted client connections and random number generation on platforms that do not have "/dev/urandom" (except windows)
+Status: install ok installed
+
+Package: libpq
+Feature: zlib
+Depends: zlib
+Architecture: x64-linux
+Multi-Arch: same
+Description: Use zlib
+Status: install ok installed
+
+Package: libpqxx
+Version: 7.9.2
+Depends: libpq, vcpkg-cmake, vcpkg-cmake-config
+Architecture: x64-linux
+Multi-Arch: same
+Abi: 81e063f948916c1e1c25976a1571fdc6316c72a0a4799f0c15832bd0a69f044d
+Description: The official C++ client API for PostgreSQL
+Status: install ok installed
+
+Package: nlohmann-json
+Version: 3.11.3
+Port-Version: 1
+Depends: vcpkg-cmake, vcpkg-cmake-config
+Architecture: x64-linux
+Multi-Arch: same
+Abi: 1d56db26635c017d0ca7865727d914b97a302f763e0f1b8140f47b35cc352fa8
+Description: JSON for Modern C++
+Status: install ok installed
+
+Package: vulkan-headers
+Version: 1.3.290.0
+Port-Version: 1
+Depends: vcpkg-cmake, vcpkg-cmake-config
+Architecture: x64-linux
+Multi-Arch: same
+Abi: a13f2e01f9ceb1824f655616c1609c938e32a42fb3f59a909928801657bfac35
+Description: Vulkan header files and API registry
+Status: install ok installed
+
+Package: vk-bootstrap
+Version: 1.3.279
+Port-Version: 1
+Depends: vcpkg-cmake, vcpkg-cmake-config, vulkan-headers
+Architecture: x64-linux
+Multi-Arch: same
+Abi: 3d57b3c7538529adc8c10c32493d474c4449de2eaf5c38b83152a6a38be630af
+Description: Vulkan bootstraping library
+Status: install ok installed
+

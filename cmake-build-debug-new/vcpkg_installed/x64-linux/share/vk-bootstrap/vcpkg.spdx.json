@@ -1,0 +1,132 @@
+{
+  "$schema": "https://raw.githubusercontent.com/spdx/spdx-spec/v2.2.1/schemas/spdx-schema.json",
+  "spdxVersion": "SPDX-2.2",
+  "dataLicense": "CC0-1.0",
+  "SPDXID": "SPDXRef-DOCUMENT",
+  "documentNamespace": "https://spdx.org/spdxdocs/vk-bootstrap-x64-linux-1.3.279#1-25d5cc0c-a1a6-44c5-bbcb-72f0bf734ca3",
+  "name": "vk-bootstrap:x64-linux@1.3.279#1 3d57b3c7538529adc8c10c32493d474c4449de2eaf5c38b83152a6a38be630af",
+  "creationInfo": {
+    "creators": [
+      "Tool: vcpkg-2024-09-30-ab8988503c7cffabfd440b243a383c0a352a023d"
+    ],
+    "created": "2024-10-08T07:35:21Z"
+  },
+  "relationships": [
+    {
+      "spdxElementId": "SPDXRef-port",
+      "relationshipType": "GENERATES",
+      "relatedSpdxElement": "SPDXRef-binary"
+    },
+    {
+      "spdxElementId": "SPDXRef-port",
+      "relationshipType": "CONTAINS",
+      "relatedSpdxElement": "SPDXRef-file-0"
+    },
+    {
+      "spdxElementId": "SPDXRef-port",
+      "relationshipType": "CONTAINS",
+      "relatedSpdxElement": "SPDXRef-file-1"
+    },
+    {
+      "spdxElementId": "SPDXRef-port",
+      "relationshipType": "CONTAINS",
+      "relatedSpdxElement": "SPDXRef-file-2"
+    },
+    {
+      "spdxElementId": "SPDXRef-binary",
+      "relationshipType": "GENERATED_FROM",
+      "relatedSpdxElement": "SPDXRef-port"
+    },
+    {
+      "spdxElementId": "SPDXRef-file-0",
+      "relationshipType": "CONTAINED_BY",
+      "relatedSpdxElement": "SPDXRef-port"
+    },
+    {
+      "spdxElementId": "SPDXRef-file-1",
+      "relationshipType": "CONTAINED_BY",
+      "relatedSpdxElement": "SPDXRef-port"
+    },
+    {
+      "spdxElementId": "SPDXRef-file-2",
+      "relationshipType": "CONTAINED_BY",
+      "relatedSpdxElement": "SPDXRef-port"
+    }
+  ],
+  "packages": [
+    {
+      "name": "vk-bootstrap",
+      "SPDXID": "SPDXRef-port",
+      "versionInfo": "1.3.279#1",
+      "downloadLocation": "git+https://github.com/Microsoft/vcpkg@33aa9fad865d5e7536507780f794845077d75a9c",
+      "homepage": "https://github.com/charles-lunarg/vk-bootstrap",
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "NOASSERTION",
+      "copyrightText": "NOASSERTION",
+      "description": "Vulkan bootstraping library",
+      "comment": "This is the port (recipe) consumed by vcpkg."
+    },
+    {
+      "name": "vk-bootstrap:x64-linux",
+      "SPDXID": "SPDXRef-binary",
+      "versionInfo": "3d57b3c7538529adc8c10c32493d474c4449de2eaf5c38b83152a6a38be630af",
+      "downloadLocation": "NONE",
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "NOASSERTION",
+      "copyrightText": "NOASSERTION",
+      "comment": "This is a binary package built by vcpkg."
+    },
+    {
+      "SPDXID": "SPDXRef-resource-1",
+      "name": "charles-lunarg/vk-bootstrap",
+      "downloadLocation": "git+https://github.com/charles-lunarg/vk-bootstrap@v1.3.279",
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "copyrightText": "NOASSERTION",
+      "checksums": [
+        {
+          "algorithm": "SHA512",
+          "checksumValue": "f925665b1d7a1c5069ca2cb6786f537bcc4b3060757db50d931091dc37ff4ef3b73b1b3adf0da84c256979fd780a2f6203de3299f634292600dcee925b9a5091"
+        }
+      ]
+    }
+  ],
+  "files": [
+    {
+      "fileName": ".//home/fatmanur/.vcpkg-clion/vcpkg/buildtrees/versioning_/versions/vk-bootstrap/33aa9fad865d5e7536507780f794845077d75a9c/portfile.cmake",
+      "SPDXID": "SPDXRef-file-0",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "810026908fbb1b8ae7f681bca64e79c2166f9fdb2bd8c58cd06e19c636f5bf22"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": ".//home/fatmanur/.vcpkg-clion/vcpkg/buildtrees/versioning_/versions/vk-bootstrap/33aa9fad865d5e7536507780f794845077d75a9c/vcpkg.json",
+      "SPDXID": "SPDXRef-file-1",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "3996baa16ad10dc9ca35dde357e6813665916506b8994efd879d017f326a32b2"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": ".//home/fatmanur/.vcpkg-clion/vcpkg/buildtrees/versioning_/versions/vk-bootstrap/33aa9fad865d5e7536507780f794845077d75a9c/fix-targets.patch",
+      "SPDXID": "SPDXRef-file-2",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "68dde24f325db8469e553c4c1bea80985f45f41b6b451647d85aae4a077cc766"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "copyrightText": "NOASSERTION"
+    }
+  ]
+}

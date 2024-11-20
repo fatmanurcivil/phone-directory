@@ -1,51 +1,40 @@
 #ifndef PRODUCT_REPOSITORY_H
 #define PRODUCT_REPOSITORY_HPP
 
-
 #include <pqxx/pqxx>
-#include <optional>
 #include "product/product.hpp"
 
 namespace ProductRepository {
 
-    inline std::vector<product> ListProducts(pqxx::connection& conn) {
-        std::vector<product> products;
+    inline void DeleteProduct(pqxx::connection& conn, int id) {
+        const std::string query = "DELETE FROM product WHERE id = $1";
         pqxx::nontransaction txn(conn);
-        const std::string query = "SELECT id, name, surname, email, phone FROM contact_groups";
+        txn.exec_params(query, id);
+    }
+
+    inline void updateProduct(pqxx::connection& conn, int id, const std::string& name, int categoryId, const std::string& categoryName) {
+        const std::string query = "UPDATE product SET name = $1, categoryId = $2, categoryName = $3 WHERE id = $4";
+        pqxx::nontransaction txn(conn);
+        txn.exec_params(query, name, categoryId, categoryName, id);
+    }
+
+    inline void Addproduct(pqxx::connection& conn, const std::string& name, int categoryId, const std::string& categoryName) {
+        const std::string query = "INSERT INTO product (name, categoryId, categoryName) VALUES ($1, $2, $3)";
+        pqxx::nontransaction txn(conn);
+        txn.exec_params(query, name, categoryId, categoryName);
+    }
+
+    inline std::vector<std::tuple<int, std::string, int, std::string>> ListProducts(pqxx::connection& conn) {
+        const std::string query = "SELECT id, name, categoryId, categoryName FROM product";
+        pqxx::nontransaction txn(conn);
         const pqxx::result result = txn.exec(query);
 
+        std::vector<std::tuple<int, std::string, int, std::string>> products;
         for (const auto& row : result) {
-            products.push_back(product::createproductFromRow(row));
+            products.emplace_back(row[0].as<int>(), row[1].as<std::string>(), row[2].as<int>(), row[3].as<std::string>());
         }
 
         return products;
-    }
-    // ContactGroup silme
-    inline void DeleteProduct(pqxx::connection& conn, int productId) {
-        const std::string query = "DELETE FROM contact_groups WHERE id = $1";
-        pqxx::nontransaction txn(conn);
-        txn.exec_params(query, productId);
-    }
-    inline void Updateproduct(pqxx::connection& conn, const std::string& name, const std::string& surname, const std::string& email, const std::string& phone) {
-        const std::string query = "UPDATE contact_groups SET group_name = $1, group_surname = $2, email = $3, phone = $4 WHERE id = $5";  // group_name ve group_surname güncellendi
-        pqxx::nontransaction txn(conn);
-        txn.exec_params(query, name, surname, email, phone);
-    }
-
-    inline std::optional<product> Getbyidproduct(pqxx::connection& conn, int productId) {
-        pqxx::nontransaction txn(conn);
-        const std::string query = "SELECT id, group_name, group_surname, email, phone FROM contact_groups WHERE id = $1";
-
-        if (const pqxx::result result = txn.exec_params(query, productId); !result.empty()) {
-            return product::createproductFromRow(result[0]);
-        }
-        return std::nullopt;
-    }
-
-    inline void Addproduct(pqxx::connection& conn, const std::string& name, const std::string& surname, const std::string& email, const std::string& phone) {
-        const std::string query = "INSERT INTO contact_groups (name, surname, email, phone) VALUES ($1, $2, $3, $4)";
-        pqxx::work txn(conn);
-        txn.exec_params(query, name, surname, email, phone);
     }
 
 }

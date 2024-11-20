@@ -2,31 +2,26 @@
 #define PRODUCT_SERVICE_HPP
 
 #include <pqxx/pqxx>
-#include <optional>
 #include <vector>
+#include <string>
 #include "product/product-repository.hpp"
 
-
 namespace ProductService {
-   //LİSTELEME
-    inline std::vector<product> Listproduct(pqxx::connection& conn) {
+
+    inline void DeleteProduct(pqxx::connection& conn, const int id) {
+        ProductRepository::DeleteProduct(conn, id);
+    }
+
+    inline void UpdateProduct(pqxx::connection& conn, const int id, const std::string& name, const int categoryId, const std::string& categoryName) {
+        ProductRepository::updateProduct(conn, id, name, categoryId, categoryName);
+    }
+
+    inline void AddProduct(pqxx::connection& conn, const std::string& name, const int categoryId, const std::string& categoryName) {
+        ProductRepository::Addproduct(conn, name, categoryId, categoryName);
+    }
+
+    inline std::vector<std::tuple<int, std::string, int, std::string>> ListProducts(pqxx::connection& conn) {
         return ProductRepository::ListProducts(conn);
-    }
-    //İD İLE GETİRME
-    inline std::optional<product> Getbyidproduct(pqxx::connection &conn, const int productId) {
-        return ProductRepository::Getbyidproduct(conn, productId);
-    }
-    //SİLME
-    inline void Deleteproduct(pqxx::connection& conn, const int productId) {
-        ProductRepository::DeleteProduct(conn, productId);
-    }
-    //GÜNCELLEME
-    inline void Updateproduct(pqxx::connection& conn, const std::string& name, const std::string& surname, const std::string& email, const std::string& phone) {
-        ProductRepository::Updateproduct(conn, name, surname, email, phone);
-    }
-    //EKLEME
-    inline void AddProduct(pqxx::connection& conn, const std::string& name, const std::string& surname, const std::string& email, const std::string& phone) {
-        ProductRepository::Addproduct(conn, name, surname, email, phone);
     }
 
 }

@@ -1,0 +1,3 @@
+/home/fatmanur/CLionProjects/ddd-test (Copy 3)/cmake-build-debug-new/CMakeFiles/crow_example.dir
+/home/fatmanur/CLionProjects/ddd-test (Copy 3)/cmake-build-debug-new/CMakeFiles/edit_cache.dir
+/home/fatmanur/CLionProjects/ddd-test (Copy 3)/cmake-build-debug-new/CMakeFiles/rebuild_cache.dir
